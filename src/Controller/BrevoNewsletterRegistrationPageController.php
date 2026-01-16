@@ -48,10 +48,7 @@ class BrevoNewsletterRegistrationPageController extends PageController
             TextField::create('FirstName', _t('Newsletter.FIRSTNAME', 'Vorname')),
             TextField::create('LastName', _t('Newsletter.LASTNAME', 'Nachname'))
         );
-
-        if ($this->ShowBirthdayField) {
-            $fields->push(DateField::create('Birthday', _t('Newsletter.BIRTHDAY', 'Geburtstag')));
-        }
+        $this->extend('updateNewsletterRegistrationFields', $fields);
 
         $brevoLists = $this->BrevoLists();
         if ($brevoLists->count() > 1) {
@@ -69,6 +66,7 @@ class BrevoNewsletterRegistrationPageController extends PageController
         if ($this->BrevoLists()->count() > 1) {
             $requiredFields->addRequiredField('Lists');
         }
+        $this->extend('updateNewsletterRegistrationRequiredFields', $requiredFields);
 
         $form = Form::create($this, __FUNCTION__, $fields, $actions, $requiredFields);
         $form->setTemplate('NewsletterRegistrationForm');
@@ -80,6 +78,7 @@ class BrevoNewsletterRegistrationPageController extends PageController
     public function handleNewsletter($data, $form)
     {
         $data = Convert::raw2sql($data);
+        $this->extend('updateNewsletterRegistrationData', $data);
         if (!$this->APIKey) {
             $form->sessionMessage('API Key failed', 'bad');
             return $this->redirectBack();
@@ -105,9 +104,7 @@ class BrevoNewsletterRegistrationPageController extends PageController
             'ANREDE_NEU' => $newSalutation,
         ];
 
-        if(isset($data['Birthday']) && $data['Birthday']){
-            $contactAttributes['GEBURTSDATUM'] = $data['Birthday'];
-        }
+        $this->extend('updateNewsletterRegistrationContactAttributes', $contactAttributes, $data);
 
         if($data['Lists']){
             $tmpArray = [];
@@ -128,6 +125,8 @@ class BrevoNewsletterRegistrationPageController extends PageController
         if($this->SuccessLinkID > 0){
             $createContact->setRedirectionUrl($this->SuccessLink()->AbsoluteLink());
         }
+
+        $this->extend('updateCreateDoiContact', $createContact, $data);
 
         try {
             // Versuche, den Kontakt zu erstellen
@@ -157,6 +156,8 @@ class BrevoNewsletterRegistrationPageController extends PageController
                 $form->sessionMessage(strip_tags($failureMessage) . ': ' . $e->getMessage(), 'bad');
             }
         }
+
+        $this->extend('onAfterNewsletterRegistration', $data, $form);
 
         return $this->redirectBack();
     }

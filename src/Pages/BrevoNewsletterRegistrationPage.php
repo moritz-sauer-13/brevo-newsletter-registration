@@ -30,7 +30,6 @@ class BrevoNewsletterRegistrationPage extends Page
 
     private static $db = [
         'APIKey' => 'Text',
-        'ShowBirthdayField' => 'Boolean',
         'DOITemplateID' => 'Int',
     ];
 
@@ -53,7 +52,6 @@ class BrevoNewsletterRegistrationPage extends Page
 
         $fields->addFieldsToTab('Root.Brevo', [
             TextField::create('APIKey', _t(__CLASS__ . '.API_KEY', 'API Key')),
-            CheckboxField::create('ShowBirthdayField', _t(__CLASS__ . '.SHOW_BIRTHDAY_FIELD', 'Geburtstagsfeld anzeigen')),
             TextField::create('DOITemplateID', _t(__CLASS__ . '.DOI_TEMPLATE_ID', 'DOI Template ID')),
         ]);
 
