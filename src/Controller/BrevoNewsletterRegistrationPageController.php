@@ -33,8 +33,6 @@ class BrevoNewsletterRegistrationPageController extends PageController
 
     private static $api_url = 'https://api.brevo.com/v3';
 
-    private static $doi_template_id = 3;
-
     public function NewsletterRegistrationForm()
     {
         if(!$this->APIKey){
@@ -124,7 +122,7 @@ class BrevoNewsletterRegistrationPageController extends PageController
 
         $createContact = new CreateDoiContact();
         $createContact->setEmail($data['Email']);
-        $createContact->setTemplateId($this->config()->get('doi_template_id'));
+        $createContact->setTemplateId($this->DOITemplateID ?: 2);
         $createContact->setIncludeListIds($data['Lists']);
         $createContact->setAttributes($contactAttributes);
         if($this->SuccessLinkID > 0){

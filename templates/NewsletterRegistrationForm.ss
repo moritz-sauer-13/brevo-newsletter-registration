@@ -5,9 +5,9 @@
 
     <fieldset>
         $Fields.fieldByName('Salutation').FieldHolder
-        $Fields.fieldByName('Email').FieldHolder
         $Fields.fieldByName('FirstName').FieldHolder
         $Fields.fieldByName('LastName').FieldHolder
+        $Fields.fieldByName('Email').FieldHolder
 
         $Fields.fieldByName('Birthday').FieldHolder
 
