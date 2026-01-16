@@ -1,12 +1,3 @@
 ---
 Name: BrevoNewsletterRegistration
 ---
-Page:
-  extensions:
-    - ContactPerson\Extensions\PageExtension
-PageController:
-  extensions:
-    - ContactPerson\Extensions\PageControllerExtension
-Silverstripe\SiteConfig\SiteConfig:
-  extensions:
-    - ContactPerson\Extensions\SiteConfigExtension

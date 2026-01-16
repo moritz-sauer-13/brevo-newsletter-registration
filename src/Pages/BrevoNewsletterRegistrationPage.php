@@ -15,6 +15,9 @@ use SilverStripe\Forms\TextareaField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\TagField\TagField;
+use Page;
+use Exception;
+use GuzzleHttp\Client;
 
 class BrevoNewsletterRegistrationPage extends Page
 {
@@ -43,14 +46,14 @@ class BrevoNewsletterRegistrationPage extends Page
         ]);
 
         $fields->addFieldsToTab('Root.Brevo', [
-            TextField::create('APIKey', 'API Key'),
+            TextField::create('APIKey', _t(__CLASS__ . '.API_KEY', 'API Key')),
         ]);
 
         if($this->APIKey){
             $availableLists = [];
             $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', $this->APIKey);
             $apiInstance = new ContactsApi(
-                new GuzzleHttp\Client(),
+                new Client(),
                 $config
             );
             try {
@@ -59,24 +62,24 @@ class BrevoNewsletterRegistrationPage extends Page
                     foreach($result->getLists() as $list){
                         if(!BrevoList::ListExists($list['id'])){
                             BrevoList::create([
-                                'ID' => $list['id'],
+                                'ListID' => $list['id'],
                                 'Title' => $list['name']
                             ])->write();
                         }
                     }
                     $fields->addFieldsToTab('Root.Brevo', [
-                        ListboxField::create('BrevoLists', 'Listen', BrevoList::get()->map())
-                            ->setDescription('Hier muss mindestens eine Liste ausgewählt werden, zu der die Newsletteranmeldung bei Brevo hinzugefügt werden soll.'),
+                        ListboxField::create('BrevoLists', _t(__CLASS__ . '.LISTS', 'Listen'), BrevoList::get()->map('ID', 'Title'))
+                            ->setDescription(_t(__CLASS__ . '.LISTS_DESCRIPTION', 'Hier muss mindestens eine Liste ausgewählt werden, zu der die Newsletteranmeldung bei Brevo hinzugefügt werden soll.')),
                     ]);
                 }
             } catch (Exception $e) {
-                echo 'Exception when calling ListsApi->getLists: ', $e->getMessage(), PHP_EOL;
+                $fields->addFieldToTab('Root.Brevo', HTMLEditorField::create('APIError', 'API Error', 'Error calling ListsApi->getLists: ' . $e->getMessage())->setReadonly(true));
             }
         }
 
         $fields->addFieldsToTab('Root.Links', [
-            TreeDropdownField::create('OptInHintLinkID', 'Weiterleitung nach erfolgreicher Anmeldung mit Hinweis auf Double Opt-In Mail', SiteTree::class),
-            TreeDropdownField::create('SuccessLinkID', 'Weiterleitung nach Double Opt-In bestätigung', SiteTree::class),
+            TreeDropdownField::create('OptInHintLinkID', _t(__CLASS__ . '.OPT_IN_HINT_LINK', 'Weiterleitung nach erfolgreicher Anmeldung mit Hinweis auf Double Opt-In Mail'), SiteTree::class),
+            TreeDropdownField::create('SuccessLinkID', _t(__CLASS__ . '.SUCCESS_LINK', 'Weiterleitung nach Double Opt-In bestätigung'), SiteTree::class),
         ]);
 
         return $fields;

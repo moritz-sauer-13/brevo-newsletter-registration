@@ -3,6 +3,7 @@
 namespace Brevo\NewsletterRegistration\DataObjects;
 
 use SilverStripe\ORM\DataObject;
+use Brevo\NewsletterRegistration\Pages\BrevoNewsletterRegistrationPage;
 
 class BrevoList extends DataObject
 {
@@ -12,7 +13,7 @@ class BrevoList extends DataObject
     ];
 
     private static $belongs_many_many = [
-        'NewsletterRegistrationPages' => NewsletterRegistrationPage::class
+        'NewsletterRegistrationPages' => BrevoNewsletterRegistrationPage::class
     ];
 
     public static function ListExists($listID)

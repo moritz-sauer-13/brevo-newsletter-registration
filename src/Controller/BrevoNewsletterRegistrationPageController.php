@@ -20,8 +20,11 @@ use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\RequiredFields;
 use SilverStripe\Forms\TextField;
+use PageController;
+use Exception;
+use GuzzleHttp\Client;
 
-class NewsletterRegistrationPageController extends PageController
+class BrevoNewsletterRegistrationPageController extends PageController
 {
     private static $allowed_actions = [
         'NewsletterRegistrationForm',
@@ -29,6 +32,8 @@ class NewsletterRegistrationPageController extends PageController
     ];
 
     private static $api_url = 'https://api.brevo.com/v3';
+
+    private static $doi_template_id = 3;
 
     public function NewsletterRegistrationForm()
     {
@@ -78,7 +83,7 @@ class NewsletterRegistrationPageController extends PageController
 
         $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', $this->APIKey);
         $apiInstance = new ContactsApi(
-            new GuzzleHttp\Client(),
+            new Client(),
             $config
         );
 
@@ -110,7 +115,7 @@ class NewsletterRegistrationPageController extends PageController
 
         $createContact = new CreateDoiContact();
         $createContact->setEmail($data['Email']);
-        $createContact->setTemplateId(3);
+        $createContact->setTemplateId($this->config()->get('doi_template_id'));
         $createContact->setIncludeListIds($data['Lists']);
         $createContact->setAttributes($contactAttributes);
         if($this->SuccessLinkID > 0){
@@ -120,7 +125,7 @@ class NewsletterRegistrationPageController extends PageController
         try {
             // Versuche, den Kontakt zu erstellen
             $apiInstance->createDoiContact($createContact);
-            $successMessage = 'Erfolgreich angemeldet. Bitte prüfen Sie Ihr Postfach um die Anmeldung zu bestätigen.';
+            $successMessage = _t('Newsletter.SUCCESS_MESSAGE', 'Erfolgreich angemeldet. Bitte prüfen Sie Ihr Postfach um die Anmeldung zu bestätigen.');
             $form->sessionMessage(strip_tags($successMessage), 'good');
             if($this->OptInHintLinkID > 0){
                 return $this->redirect($this->OptInHintLink()->Link());
@@ -134,14 +139,14 @@ class NewsletterRegistrationPageController extends PageController
                     $updateContact->setListIds($data['Lists']);
                     $apiInstance->updateContact($data['Email'], $updateContact);
 
-                    $successMessage = 'Kontakt erfolgreich aktualisiert';
+                    $successMessage = _t('Newsletter.UPDATE_MESSAGE', 'Kontakt erfolgreich aktualisiert');
                     $form->sessionMessage(strip_tags($successMessage), 'good');
                 } catch (Exception $updateException) {
-                    $failureMessage = 'Fehler beim Aktualisieren des Kontakts';
+                    $failureMessage = _t('Newsletter.UPDATE_ERROR', 'Fehler beim Aktualisieren des Kontakts');
                     $form->sessionMessage(strip_tags($failureMessage) . ': ' . $updateException->getMessage(), 'bad');
                 }
             } else {
-                $failureMessage = 'Fehler bei der Anmeldung';
+                $failureMessage = _t('Newsletter.ERROR_MESSAGE', 'Fehler bei der Anmeldung');
                 $form->sessionMessage(strip_tags($failureMessage) . ': ' . $e->getMessage(), 'bad');
             }
         }
