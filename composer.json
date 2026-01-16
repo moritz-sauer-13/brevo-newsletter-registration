@@ -1,0 +1,25 @@
+{
+  "name":"moritz-sauer-13/brevo-newsletter-registration",
+  "description": "Brevo Newsletter Registration",
+  "authors": [
+    {
+      "name":"Tietge GmbH",
+      "email": "ms@tietge.com"
+    }
+  ],
+  "require":{
+    "silverstripe/recipe-cms": "^5",
+    "getbrevo/brevo-php": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ContactPerson\\": "src/"
+    }
+  },
+  "extra": {
+    "expose": [
+      "client/scss",
+      "client/js"
+    ]
+  }
+}
