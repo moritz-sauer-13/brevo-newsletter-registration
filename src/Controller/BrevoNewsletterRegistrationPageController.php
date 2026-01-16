@@ -48,15 +48,18 @@ class BrevoNewsletterRegistrationPageController extends PageController
                 'Divers' => _t('Newsletter.DIVERS', 'Divers'),
             ])->setEmptyString(_t('Newsletter.SELECT', '- - bitte wählen - -')),
             TextField::create('FirstName', _t('Newsletter.FIRSTNAME', 'Vorname')),
-            TextField::create('LastName', _t('Newsletter.LASTNAME', 'Nachname')),
-            DateField::create('Birthday', _t('Newsletter.BIRTHDAY', 'Geburtstag'))
+            TextField::create('LastName', _t('Newsletter.LASTNAME', 'Nachname'))
         );
 
-        $fields->push($listsField = CheckboxSetField::create('Lists', _t('Newsletter.LISTS', 'Listen'), $this->BrevoLists()));
-        if($this->BrevoLists()->count() == 1){
-            $listsField->setValue($this->BrevoLists()->first()->ID);
-            $listsField->setDisabled(true);
-            $listsField->setTitle(_t('Newsletter.LIST', 'Liste'));
+        if ($this->ShowBirthdayField) {
+            $fields->push(DateField::create('Birthday', _t('Newsletter.BIRTHDAY', 'Geburtstag')));
+        }
+
+        $brevoLists = $this->BrevoLists();
+        if ($brevoLists->count() > 1) {
+            $fields->push(CheckboxSetField::create('Lists', _t('Newsletter.LISTS', 'Listen'), $brevoLists));
+        } elseif ($brevoLists->count() == 1) {
+            $fields->push(HiddenField::create('Lists[0]', 'Lists', $brevoLists->first()->ID));
         }
 
         $actions = FieldList::create(
@@ -64,7 +67,10 @@ class BrevoNewsletterRegistrationPageController extends PageController
                 ->addExtraClass('btn-primary-red-focus')
         );
 
-        $requiredFields = RequiredFields::create('Email', 'Salutation', 'FirstName', 'LastName', 'Lists');
+        $requiredFields = RequiredFields::create('Email', 'Salutation', 'FirstName', 'LastName');
+        if ($this->BrevoLists()->count() > 1) {
+            $requiredFields->addRequiredField('Lists');
+        }
 
         $form = Form::create($this, __FUNCTION__, $fields, $actions, $requiredFields);
         $form->setTemplate('NewsletterRegistrationForm');
@@ -101,14 +107,17 @@ class BrevoNewsletterRegistrationPageController extends PageController
             'ANREDE_NEU' => $newSalutation,
         ];
 
-        if($data['Birthday']){
+        if(isset($data['Birthday']) && $data['Birthday']){
             $contactAttributes['GEBURTSDATUM'] = $data['Birthday'];
         }
 
         if($data['Lists']){
             $tmpArray = [];
             foreach ($data['Lists'] as $listID){
-                $tmpArray[] = intval($listID);
+                $brevoList = \Brevo\NewsletterRegistration\DataObjects\BrevoList::get()->byID($listID);
+                if ($brevoList) {
+                    $tmpArray[] = intval($brevoList->ListID);
+                }
             }
             $data['Lists'] = $tmpArray;
         }

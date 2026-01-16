@@ -7,6 +7,8 @@ use Brevo\NewsletterRegistration\Pages\BrevoNewsletterRegistrationPage;
 
 class BrevoList extends DataObject
 {
+    private static $table_name = 'BrevoNewsletterList';
+
     private static $db = [
         'ListID' => 'Text',
         'Title' => 'Text',

@@ -7,6 +7,7 @@ use Brevo\Client\Configuration;
 use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\Debug;
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
@@ -15,17 +16,21 @@ use SilverStripe\Forms\TextareaField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\TagField\TagField;
+use Brevo\NewsletterRegistration\DataObjects\BrevoList;
 use Page;
 use Exception;
 use GuzzleHttp\Client;
 
 class BrevoNewsletterRegistrationPage extends Page
 {
+    private static $table_name = 'BrevoNewsletterRegistrationPage';
+
     private static $singular_name = 'Newsletter Anmeldung';
     private static $plural_name = 'Newsletter Anmeldungen';
 
     private static $db = [
         'APIKey' => 'Text',
+        'ShowBirthdayField' => 'Boolean',
     ];
 
     private static $many_many = [
@@ -47,6 +52,7 @@ class BrevoNewsletterRegistrationPage extends Page
 
         $fields->addFieldsToTab('Root.Brevo', [
             TextField::create('APIKey', _t(__CLASS__ . '.API_KEY', 'API Key')),
+            CheckboxField::create('ShowBirthdayField', _t(__CLASS__ . '.SHOW_BIRTHDAY_FIELD', 'Geburtstagsfeld anzeigen')),
         ]);
 
         if($this->APIKey){

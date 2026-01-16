@@ -4,49 +4,19 @@
     <% end_if %>
 
     <fieldset>
-        <div id="Email" class="field email text">
-            <label class="left" for="{$FormName}_Email">{$Fields.fieldByName('Email').Title}</label>
-            <div class="middleColumn">
-                $Fields.fieldByName('Email')
-            </div>
-        </div>
+        $Fields.fieldByName('Salutation').FieldHolder
+        $Fields.fieldByName('Email').FieldHolder
+        $Fields.fieldByName('FirstName').FieldHolder
+        $Fields.fieldByName('LastName').FieldHolder
 
-        <div id="Salutation" class="field dropdown">
-            <label class="left" for="{$FormName}_Salutation">{$Fields.fieldByName('Salutation').Title}</label>
-            <div class="middleColumn">
-                $Fields.fieldByName('Salutation')
-            </div>
-        </div>
+        $Fields.fieldByName('Birthday').FieldHolder
 
-        <div id="FirstName" class="field text">
-            <label class="left" for="{$FormName}_FirstName">{$Fields.fieldByName('FirstName').Title}</label>
-            <div class="middleColumn">
-                $Fields.fieldByName('FirstName')
-            </div>
-        </div>
-
-        <div id="LastName" class="field text">
-            <label class="left" for="{$FormName}_LastName">{$Fields.fieldByName('LastName').Title}</label>
-            <div class="middleColumn">
-                $Fields.fieldByName('LastName')
-            </div>
-        </div>
-
-        <div id="Birthday" class="field date text">
-            <label class="left" for="{$FormName}_Birthday">{$Fields.fieldByName('Birthday').Title}</label>
-            <div class="middleColumn">
-                $Fields.fieldByName('Birthday')
-            </div>
-        </div>
-
-        <div id="Lists" class="field optionset checkboxset">
-            <label class="left">{$Fields.fieldByName('Lists').Title}</label>
-            <div class="middleColumn">
-                $Fields.fieldByName('Lists')
-            </div>
-        </div>
+        $Fields.fieldByName('Lists').FieldHolder
 
         $Fields.fieldByName('SecurityID')
+        <div class="mb-4">
+            $Fields.fieldByName('Captcha')
+        </div>
     </fieldset>
 
     <div class="Actions">
