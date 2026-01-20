@@ -9,7 +9,6 @@ use Brevo\Client\Model\CreateContact;
 use Brevo\Client\Model\CreateDoiContact;
 use Brevo\Client\Model\UpdateContact;
 use SilverStripe\Core\Convert;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\DateField;
 use SilverStripe\Forms\DropdownField;
@@ -33,6 +32,8 @@ class BrevoNewsletterRegistrationPageController extends PageController
 
     private static $api_url = 'https://api.brevo.com/v3';
 
+    private static $doi_template_id = 2;
+
     public function NewsletterRegistrationForm()
     {
         if(!$this->APIKey){
@@ -54,7 +55,7 @@ class BrevoNewsletterRegistrationPageController extends PageController
         if ($brevoLists->count() > 1) {
             $fields->push(CheckboxSetField::create('Lists', _t('Newsletter.LISTS', 'Listen'), $brevoLists));
         } elseif ($brevoLists->count() == 1) {
-            $fields->push(HiddenField::create('Lists[0]', 'Lists', $brevoLists->first()->ID));
+            $fields->push(HiddenField::create('Lists', 'Lists', $brevoLists->first()->ID));
         }
 
         $actions = FieldList::create(
@@ -70,6 +71,7 @@ class BrevoNewsletterRegistrationPageController extends PageController
 
         $form = Form::create($this, __FUNCTION__, $fields, $actions, $requiredFields);
         $form->setTemplate('NewsletterRegistrationForm');
+
         $form->enableSpamProtection();
 
         return $form;
@@ -107,6 +109,9 @@ class BrevoNewsletterRegistrationPageController extends PageController
         $this->extend('updateNewsletterRegistrationContactAttributes', $contactAttributes, $data);
 
         if($data['Lists']){
+            if(!is_array($data['Lists'])){
+                $data['Lists'] = [$data['Lists']];
+            }
             $tmpArray = [];
             foreach ($data['Lists'] as $listID){
                 $brevoList = \Brevo\NewsletterRegistration\DataObjects\BrevoList::get()->byID($listID);
@@ -119,7 +124,10 @@ class BrevoNewsletterRegistrationPageController extends PageController
 
         $createContact = new CreateDoiContact();
         $createContact->setEmail($data['Email']);
-        $createContact->setTemplateId($this->DOITemplateID ?: 2);
+
+        $templateId = $this->DOITemplateID ?: $this->config()->get('doi_template_id');
+        $createContact->setTemplateId($templateId);
+
         $createContact->setIncludeListIds($data['Lists']);
         $createContact->setAttributes($contactAttributes);
         if($this->SuccessLinkID > 0){

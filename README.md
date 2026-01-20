@@ -9,6 +9,7 @@ Adds a page type with a Newsletter Registration Form that integrates with Brevo 
 - Support for Double Opt-In (DOI) via Brevo.
 - Configurable redirect pages for success and DOI hints.
 - Fully localized (English and German).
+- Extensible via SilverStripe Extension system.
 
 ## Requirements
 
@@ -25,22 +26,25 @@ After installation, run a `dev/build?flush=all`.
 
 ## Configuration
 
-You can configure the default DOI template ID via SilverStripe's configuration system:
-
-```yaml
-Brevo\NewsletterRegistration\Pages\BrevoNewsletterRegistrationPageController:
-  doi_template_id: 3
-```
+The registration page can be configured via the CMS (Brevo and Links tabs). Here you can set the API Key, select Brevo lists, and define the DOI Template ID.
 
 ## Usage
 
 1. Create a new page of type "Newsletter Anmeldung" in the CMS.
 2. Enter your Brevo API Key in the "Brevo" tab.
-3. Save the page. The available lists from your Brevo account will be fetched and displayed.
-4. Select one or more lists.
-5. In the "Links" tab, select pages for redirection:
-   - **Opt-In Hint Link**: Where to go after the form is submitted (e.g., "Please check your emails").
-   - **Success Link**: The URL Brevo will redirect the user to after they clicked the DOI link (must match your Brevo template configuration).
+3. Select one or more lists after the API key is validated.
+4. Configure redirect pages in the "Links" tab.
+
+## Extensibility
+
+Available hooks for `BrevoNewsletterRegistrationPageController`:
+
+- `updateNewsletterRegistrationFields($fields)`
+- `updateNewsletterRegistrationRequiredFields($requiredFields)`
+- `updateNewsletterRegistrationData($data)`
+- `updateNewsletterRegistrationContactAttributes($contactAttributes, $data)`
+- `updateCreateDoiContact($createContact, $data)`
+- `onAfterNewsletterRegistration($data, $form)`
 
 ## License
 MIT
