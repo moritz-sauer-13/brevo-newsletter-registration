@@ -1,11 +1,11 @@
 <?php
 
-namespace Brevo\NewsletterRegistration\Controller;
+namespace Brevo\NewsletterRegistration\Elements;
 
 use Brevo\NewsletterRegistration\Traits\BrevoNewsletterFormTrait;
-use PageController;
+use DNADesign\Elemental\Controllers\ElementController;
 
-class BrevoNewsletterRegistrationPageController extends PageController
+class BrevoNewsletterRegistrationElementController extends ElementController
 {
     use BrevoNewsletterFormTrait;
 
@@ -16,6 +16,6 @@ class BrevoNewsletterRegistrationPageController extends PageController
 
     protected function getNewsletterDataProvider()
     {
-        return $this->data();
+        return $this->getElement();
     }
 }

@@ -1,9 +1,9 @@
 <div class="container">
-    <div class="row">
-        <div class="col-lg-6 col-xl-5">
+    <div class="flex flex-wrap gap-8 lg:gap-16">
+        <div class="basis-[450px]">
             $Content
         </div>
-        <div class="col-lg-6 offset-xl-1">
+        <div class="basis-[450px]">
             $NewsletterRegistrationForm
         </div>
     </div>

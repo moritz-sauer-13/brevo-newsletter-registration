@@ -1,0 +1,13 @@
+{
+  "name": "tailwind-theme",
+  "version": "1.0.0",
+  "description": "Tailwind CSS theme for SilverStripe",
+  "scripts": {
+    "dev": "tailwindcss -i ./client/css/input.css -o ./client/dist/styles.css --watch",
+    "build": "tailwindcss -i ./client/css/input.css -o ./client/dist/styles.css --minify",
+    "postinstall": "npm run build"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0"
+  }
+}

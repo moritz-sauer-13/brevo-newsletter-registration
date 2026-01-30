@@ -1,15 +1,18 @@
 {
-  "name":"moritz-sauer-13/brevo-newsletter-registration",
+  "name": "moritz-sauer-13/brevo-newsletter-registration",
   "description": "Brevo Newsletter Registration",
   "authors": [
     {
-      "name":"Tietge GmbH",
+      "name": "Tietge GmbH",
       "email": "ms@tietge.com"
     }
   ],
-  "require":{
-    "silverstripe/recipe-cms": "^5",
-    "getbrevo/brevo-php": "^2.0"
+  "require": {
+    "silverstripe/framework": "^6",
+    "silverstripe/cms": "^6",
+    "dnadesign/silverstripe-elemental": "^6",
+    "getbrevo/brevo-php": "^2.0",
+    "silverstripe/spamprotection": "^5.0"
   },
   "autoload": {
     "psr-4": {
@@ -20,6 +23,26 @@
     "expose": [
       "client/scss",
       "client/js"
+    ],
+    "project-files-installed": [
+      ".htaccess",
+      "app/.htaccess",
+      "app/_config/mimevalidator.yml",
+      "app/_config/mysite.yml",
+      "app/src/Page.php",
+      "app/src/PageController.php"
+    ],
+    "public-files-installed": [
+      ".htaccess",
+      "index.php",
+      "web.config"
     ]
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true,
+      "silverstripe/recipe-plugin": true,
+      "silverstripe/vendor-plugin": true
+    }
   }
 }
