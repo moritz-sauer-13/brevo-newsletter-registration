@@ -10,6 +10,7 @@ use Brevo\NewsletterRegistration\DataObjects\BrevoList;
 use GuzzleHttp\Client;
 use SilverStripe\Core\Convert;
 use SilverStripe\Forms\CheckboxSetField;
+use SilverStripe\View\Requirements;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\EmailField;
 use SilverStripe\Forms\FieldList;
@@ -30,6 +31,15 @@ trait BrevoNewsletterFormTrait
 {
     private static $doi_template_id = 2;
 
+    private static $include_default_styles = true;
+
+    protected function loadNewsletterStyles(): void
+    {
+        if ($this->config()->get('include_default_styles')) {
+            Requirements::css('moritz-sauer-13/brevo-newsletter-registration:client/dist/styles.css');
+        }
+    }
+
     /**
      * Returns the data provider (Page or Element)
      */
@@ -37,6 +47,8 @@ trait BrevoNewsletterFormTrait
 
     public function NewsletterRegistrationForm()
     {
+        $this->loadNewsletterStyles();
+
         $provider = $this->getNewsletterDataProvider();
 
         if (!$provider->APIKey) {
