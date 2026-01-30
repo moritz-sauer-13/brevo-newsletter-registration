@@ -22,7 +22,7 @@ class BrevoNewsletterRegistrationElement extends BaseElement
     private static $db = [
         'APIKey' => 'Text',
         'DOITemplateID' => 'Int',
-        'ContentText' => 'HTMLText',
+        'Content' => 'HTMLText',
     ];
 
     private static $many_many = [
@@ -50,7 +50,7 @@ class BrevoNewsletterRegistrationElement extends BaseElement
         $fields = parent::getCMSFields();
 
         $fields->addFieldsToTab('Root.Main', [
-            HTMLEditorField::create('ContentText', _t(__CLASS__ . '.CONTENT', 'Inhalt')),
+            HTMLEditorField::create('Content', _t(__CLASS__ . '.CONTENT', 'Inhalt')),
         ]);
 
         return $this->getBrevoConfigFields($fields);
