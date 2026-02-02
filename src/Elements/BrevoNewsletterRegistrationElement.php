@@ -2,8 +2,8 @@
 
 namespace Brevo\NewsletterRegistration\Elements;
 
-use Brevo\NewsletterRegistration\Controller\BrevoNewsletterRegistrationPageController;
 use Brevo\NewsletterRegistration\DataObjects\BrevoList;
+use Brevo\NewsletterRegistration\Pages\BrevoNewsletterRegistrationPageController;
 use Brevo\NewsletterRegistration\Traits\BrevoNewsletterConfigTrait;
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\CMS\Model\SiteTree;

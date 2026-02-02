@@ -1,6 +1,6 @@
 <?php
 
-namespace Brevo\NewsletterRegistration\Controller;
+namespace Brevo\NewsletterRegistration\Pages;
 
 use Brevo\NewsletterRegistration\Traits\BrevoNewsletterFormTrait;
 use PageController;
