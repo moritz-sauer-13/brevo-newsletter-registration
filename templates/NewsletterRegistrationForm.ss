@@ -14,9 +14,7 @@
         $Fields.fieldByName('Lists').FieldHolder
 
         $Fields.fieldByName('SecurityID')
-        <div class="mb-4">
-            $Fields.fieldByName('Captcha')
-        </div>
+        $Fields.fieldByName('Captcha')
     </fieldset>
 
     <div class="Actions">

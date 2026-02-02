@@ -7,6 +7,7 @@ use Brevo\Client\Configuration;
 use Brevo\NewsletterRegistration\DataObjects\BrevoList;
 use GuzzleHttp\Client;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Dev\Debug;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\ListboxField;
 use SilverStripe\Forms\TextField;
@@ -36,10 +37,11 @@ trait BrevoNewsletterConfigTrait
                 if ($result && $result->getLists()) {
                     foreach ($result->getLists() as $list) {
                         if (!BrevoList::ListExists($list['id'])) {
-                            BrevoList::create([
-                                'ListID' => $list['id'],
+                            $newList = new BrevoList([
+                                'ListID' => (string) $list['id'],
                                 'Title' => $list['name']
-                            ])->write();
+                            ]);
+                            $newList->write();
                         }
                     }
                     $fields->addFieldsToTab('Root.Brevo', [

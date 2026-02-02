@@ -168,18 +168,26 @@ trait BrevoNewsletterFormTrait
 
                     $successMessage = _t('Newsletter.UPDATE_MESSAGE', 'Kontakt erfolgreich aktualisiert');
                     $form->sessionMessage(strip_tags($successMessage), 'good');
+                    if ($provider->OptInHintLinkID > 0) {
+                        return $this->redirect($provider->OptInHintLink()->Link());
+                    }
                 } catch (Exception $updateException) {
                     $failureMessage = _t('Newsletter.UPDATE_ERROR', 'Fehler beim Aktualisieren des Kontakts');
                     $form->sessionMessage(strip_tags($failureMessage) . ': ' . $updateException->getMessage(), 'bad');
+                    return $this->redirectBack();
                 }
             } else {
                 $failureMessage = _t('Newsletter.ERROR_MESSAGE', 'Fehler bei der Anmeldung');
                 $form->sessionMessage(strip_tags($failureMessage) . ': ' . $e->getMessage(), 'bad');
+                return $this->redirectBack();
             }
         }
 
         $this->extend('onAfterNewsletterRegistration', $data, $form);
 
+        if ($provider->OptInHintLinkID > 0) {
+            return $this->redirect($provider->OptInHintLink()->Link());
+        }
         return $this->redirectBack();
     }
 }
