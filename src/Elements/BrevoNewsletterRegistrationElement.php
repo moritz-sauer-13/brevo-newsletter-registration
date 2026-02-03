@@ -70,7 +70,6 @@ class BrevoNewsletterRegistrationElement extends BaseElement
         }
 
         if ($current && $current->getAction() == 'handleNewsletter' && $request->param('ID') == $this->ID) {
-            die('XYZ');
             return $controller->renderWith(BrevoNewsletterRegistrationPageController::class .'_ReceivedFormSubmission');
         }
         // Get the page link from the element's parent page for correct form action URL
